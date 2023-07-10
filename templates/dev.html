@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Indian Millet Information</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      h1 {
+        margin-top: 50px;
+      }
+      h2 {
+        margin-top: 30px;
+      }
+      form {
+        display: inline-block;
+        margin-top: 30px;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      input[type="text"] {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      button[type="submit"] {
+        padding: 12px 20px;
+        background-color: #4caf50;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Indian Millet Information</h1>
+    <h2 style="color:red">Note: This is for developers only. Please don't try to use it if you are a User..</h2>
+        <h2>Select your worksheet</h2>
+        <form action="/data-admin" method="POST">
+          <label for="worksheetName">Worksheet Name:</label>
+          <input type="text" name="worksheetName" id="worksheetName" required />
+          <br /><br />
+          <button type="submit">Submit</button>
+        </form>
+      </body>
+    </html>
+  </body>
+</html>

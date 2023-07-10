@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Millet Data</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f7fe;
+        margin: 0;
+        padding: 0;
+      }
+      h2 {
+        text-align: center;
+        margin-top: 30px;
+      }
+      form {
+        width: 50%;
+        margin: 0 auto;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      input[type="text"]:read-only {
+        background-color: #fff;
+        cursor: not-allowed;
+      }
+      input[type="text"] {
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        transition: all 0.5s ease;
+        background-color: #f7f8ff;
+      }
+      input[type="text"]:focus {
+        outline: none;
+        background-color: #fff;
+        border-color: #3e4567;
+        box-shadow: 0 0 5px #3e4567;
+      }
+      input[type="submit"] {
+        display: block;
+        width: 25%;
+        margin: 0 auto;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: #3e4567;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+      }
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Update Information - {{ wkname }}</h2>
+    <form method="POST">
+      <input type="hidden" name="worksheetName" value="{{ wkname }}" />
+      {% for key in keys %} {% if key == "S.No." %}
+      <label for="{{key}}">{{key}}:</label>
+      <input
+        type="text"
+        name="{{key}}"
+        id="{{key}}"
+        value="{{known[loop.index]}}"
+        readonly
+      />
+      {% else %}
+      <div class="form-group">
+        <label for="{{ key }}">{{ key }}</label>
+        <input
+          type="text"
+          name="{{ key }}"
+          id="{{ key }}"
+          value="{{ known[loop.index] }}"
+          required
+        />
+      </div>
+      {% endif %} {% endfor %}
+      <input type="submit" value="Update" />
+    </form>
+  </body>
+</html>

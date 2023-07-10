@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Indian Millet Information</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f7fe;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #3e4567;
+      }
+      h2 {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 24px;
+        color: #3e4567;
+        text-transform: uppercase;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th {
+        background-color: #d4d8ff;
+        font-weight: bold;
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #9a9bab;
+      }
+      td {
+        padding: 8px;
+        border: 1px solid #9a9bab;
+      }
+      tr {
+        transition: ease-in-out 0.5s;
+      }
+      tr:nth-child(even) {
+        background-color: #f5f6ff;
+        transition: ease-in-out 0.3s;
+      }
+      tr:hover {
+        background-color: #e6e7ff;
+      }
+      .search-bar {
+        text-align: center;
+        margin-top: 20px;
+      }
+      #myInput {
+        padding: 8px;
+        width: 50%;
+        box-sizing: border-box;
+      }
+      .action-buttons {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .action-buttons button {
+        margin: 0 5px;
+        padding: 10px 15px;
+        background-color: #3e4567;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .action-buttons button:hover {
+        background-color: #45a049;
+      }
+      .total-row-button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 15px;
+        background-color: #3e4567;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .total-row-button:hover {
+        background-color: #45a049;
+      }
+      #totalRow {
+        display: none;
+        font-weight: bold;
+      }
+      .update-button {
+        background-color: #3e4567;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .update-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body onload="myFunction()">
+    <h1>Indian Millet Information</h1>
+    <h2>Display Information - {{wkname}}</h2>
+    <div class="search-bar">
+      <input
+        type="text"
+        id="myInput"
+        onkeyup="myFunction()"
+        placeholder="Search for anything in the table..."
+        title="Type in a name"
+        value="{{extras}}"
+      />
+    </div>
+    <table id="myTable">
+      <tr>
+        {% for key in keys %}
+        <th>{{key}}</th>
+        {% endfor %}
+        <th>Actions</th>
+      </tr>
+      {% for row in data %}
+      <tr>
+        {% for key in keys %}
+        <td>{{row[key]}}</td>
+        {% endfor %}
+        <td>
+          <a href="/update?worksheetName={{wkname}}&rowIndex={{loop.index}}">
+            <button class="update-button">Update</button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="action-buttons">
+      <a href="/add?worksheetName={{wkname}}">
+        <button>Add Data</button>
+      </a>
+    </div>
+    <button onclick="calculateColumnTotals()" class="total-row-button">
+      Display Total Row
+    </button>
+
+    <table id="totalRow" class="total-row">
+      <tr>
+        {% for key in keys %}
+        <th></th>
+        {% endfor %}
+      </tr>
+    </table>
+    <script>
+      var cal = false;
+      function calculateColumnTotals() {
+        if (cal) {
+          return;
+        }
+        cal = true;
+        var table = document.getElementById("myTable");
+        var totalRow = table.insertRow(-1);
+        var columnCount = table.rows[0].cells.length;
+        var flag = true;
+        for (var i = 0; i < columnCount; i++) {
+          var total = 0;
+          if (i == 0) flag = false;
+          else flag = true;
+          for (var j = 1; j < table.rows.length - 1; j++) {
+            var cellValue = parseFloat(table.rows[j].cells[i].innerHTML);
+            if (!isNaN(cellValue)) {
+              total += cellValue;
+            }
+          }
+          var cell = totalRow.insertCell();
+          if (total == 0 || flag == false) cell.innerHTML = "";
+          else cell.innerHTML = "Total: " + total.toFixed(2);
+        }
+      }
+      function myFunction(extras) {
+        var input, filter, table, tr, td, i, txtValue;
+        try {
+          input = document.getElementById("myInput");
+          if (input.value === "URL") {
+            input.value = "";
+            return;
+          }
+        } catch (err) {
+          input = { value: extras };
+        }
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+          var foundMatch = false;
+          td = tr[i].getElementsByTagName("td");
+          for (const element of td) {
+            txtValue = element.textContent || element.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              foundMatch = true;
+              break;
+            }
+          }
+          if (foundMatch) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
